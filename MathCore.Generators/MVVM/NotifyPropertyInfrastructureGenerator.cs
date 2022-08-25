@@ -57,6 +57,7 @@ public class NotifyPropertyInfrastructureGenerator : ISourceGenerator
 namespace {{NameSpace}}.MVVM;
 
 [System.AttributeUsage(System.AttributeTargets.Field)]
+[System.Diagnostics.Conditional("MATHCORE_GENERATORS_DEBUG")] 
 internal class NotifyPropertyAttribute : System.Attribute
 {
     public string PropertyName { get; init; }
@@ -72,6 +73,7 @@ internal class NotifyPropertyAttribute : System.Attribute
 namespace {{Namespace}}.MVVM;
 
 [System.AttributeUsage(System.AttributeTargets.Method)]
+[System.Diagnostics.Conditional("MATHCORE_GENERATORS_DEBUG")] 
 internal class CommandAttribute : System.Attribute 
 {
     public string CommandName { get; set; }

@@ -9,4 +9,9 @@ public partial class LibViewModel
 
     [Command]
     private void OnCommand() { }
+
+    public void Test()
+    {
+        Title = "123";
+    }
 }
