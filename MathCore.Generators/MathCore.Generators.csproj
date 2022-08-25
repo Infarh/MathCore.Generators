@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <Using Include="Microsoft.CodeAnalysis" />
+    <Using Include="MathCore.Generators.Infrastructure.Extensions" />
   </ItemGroup>
 
   <ItemGroup>
