@@ -24,6 +24,35 @@ public static class StringBuilderExtensions
 
     public static StringWriter CreateWriter(this StringBuilder builder) => new(builder);
 
+    public readonly ref struct RegionBuilder
+    {
+        private readonly int _Ident;
+        private readonly bool _FreeLineOffset;
+
+        public StringBuilder Source { get; }
+
+        public RegionBuilder(StringBuilder source, string RegionName, int Ident = 1, bool FreeLineOffset = true)
+        {
+            Source = source;
+            _Ident = Ident;
+            _FreeLineOffset = FreeLineOffset;
+            source.Ident(Ident).Append("# region {0}", RegionName).LN();
+            if (FreeLineOffset)
+                source.LN();
+        }
+
+        public void Dispose()
+        {
+            var source = Source;
+            if (_FreeLineOffset)
+                source.LN();
+            source.Ident(_Ident).Append("#endregion").LN();
+        }
+    }
+
+    public static RegionBuilder Region(this StringBuilder builder, string RegionName, int Ident = 1, bool FreeLineOffset = true) => 
+        new(builder, RegionName, Ident, FreeLineOffset);
+
     public static StringBuilder AddProperty(this StringBuilder source, string Type, string FieldName, string PropertyName) => source
         .Append("    {").LN()
         .Append("        get => {0};", FieldName).LN()
@@ -90,4 +119,11 @@ public static class StringBuilderExtensions
 
     public static StringBuilder LN(this StringBuilder builder) => builder.AppendLine();
     public static StringBuilder LN(this StringBuilder builder, string str) => builder.AppendLine(str);
+
+    public static StringBuilder Ident(this StringBuilder builder, int Level = 1, string Ident = "    ")
+    {
+        while (Level-- > 0)
+            builder.Append(Ident);
+        return builder;
+    }
 }

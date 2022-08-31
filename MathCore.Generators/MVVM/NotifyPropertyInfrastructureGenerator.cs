@@ -41,8 +41,8 @@ public class NotifyPropertyInfrastructureGenerator : ISourceGenerator
             var command_attribute_source = GetCommandAttributeSourceText(name_space.TrimEnd(".MVVM"));
             context.AddSource("CommandAttribute.g.cs", command_attribute_source);
 
-            var command_source = GetICommandImplementationSourceText(name_space);
-            context.AddSource("Command.g.cs", command_source);
+            //var command_source = GetICommandImplementationSourceText(name_space);
+            //context.AddSource("Command.g.cs", command_source);
         }
         catch (Exception e)
         {
@@ -57,7 +57,7 @@ public class NotifyPropertyInfrastructureGenerator : ISourceGenerator
 namespace {{NameSpace}}.MVVM;
 
 [System.AttributeUsage(System.AttributeTargets.Field)]
-[System.Diagnostics.Conditional("MATHCORE_GENERATORS_DEBUG")] 
+//[System.Diagnostics.Conditional("MATHCORE_GENERATORS_DEBUG")] 
 internal class NotifyPropertyAttribute : System.Attribute
 {
     public string PropertyName { get; init; }
@@ -70,13 +70,16 @@ internal class NotifyPropertyAttribute : System.Attribute
 
     public static string GetCommandAttributeSource(string Namespace) => $$"""
 // Auto-generated code at {{DateTime.Now:dd.MM.yyyy HH:mm:ss.fff}}
+#nullable enable
 namespace {{Namespace}}.MVVM;
 
 [System.AttributeUsage(System.AttributeTargets.Method)]
-[System.Diagnostics.Conditional("MATHCORE_GENERATORS_DEBUG")] 
+//[System.Diagnostics.Conditional("MATHCORE_GENERATORS_DEBUG")] 
 internal class CommandAttribute : System.Attribute 
 {
-    public string CommandName { get; set; }
+    public string? CommandName { get; set; }
+
+    public Type? CommandType { get; set; }
 }
 """;
 

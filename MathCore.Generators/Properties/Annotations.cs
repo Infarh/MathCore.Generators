@@ -23,7 +23,6 @@ SOFTWARE. */
 #nullable disable
 
 using System;
-using System.Diagnostics;
 // ReSharper disable UnusedType.Global
 
 #pragma warning disable 1591
@@ -34,8 +33,7 @@ using System.Diagnostics;
 // ReSharper disable MemberCanBeProtected.Global
 // ReSharper disable InconsistentNaming
 
-// ReSharper disable once CheckNamespace
-namespace MathCore.Generators.Annotations
+namespace JetBrains.Annotations
 {
     /// <summary>
     /// Indicates that the value of the marked element could be <c>null</c> sometimes,
@@ -53,7 +51,6 @@ namespace MathCore.Generators.Annotations
       AttributeTargets.Method | AttributeTargets.Parameter | AttributeTargets.Property |
       AttributeTargets.Delegate | AttributeTargets.Field | AttributeTargets.Event |
       AttributeTargets.Class | AttributeTargets.Interface | AttributeTargets.GenericParameter)]
-    [Conditional("JETBRAINS_ANNOTATIONS")]
     internal sealed class CanBeNullAttribute : Attribute { }
 
     /// <summary>
@@ -68,7 +65,6 @@ namespace MathCore.Generators.Annotations
       AttributeTargets.Method | AttributeTargets.Parameter | AttributeTargets.Property |
       AttributeTargets.Delegate | AttributeTargets.Field | AttributeTargets.Event |
       AttributeTargets.Class | AttributeTargets.Interface | AttributeTargets.GenericParameter)]
-    [Conditional("JETBRAINS_ANNOTATIONS")]
     internal sealed class NotNullAttribute : Attribute { }
 
     /// <summary>
@@ -88,7 +84,6 @@ namespace MathCore.Generators.Annotations
     [AttributeUsage(
       AttributeTargets.Method | AttributeTargets.Parameter | AttributeTargets.Property |
       AttributeTargets.Delegate | AttributeTargets.Field)]
-    [Conditional("JETBRAINS_ANNOTATIONS")]
     internal sealed class ItemNotNullAttribute : Attribute { }
 
     /// <summary>
@@ -109,7 +104,6 @@ namespace MathCore.Generators.Annotations
     [AttributeUsage(
       AttributeTargets.Method | AttributeTargets.Parameter | AttributeTargets.Property |
       AttributeTargets.Delegate | AttributeTargets.Field)]
-    [Conditional("JETBRAINS_ANNOTATIONS")]
     internal sealed class ItemCanBeNullAttribute : Attribute { }
 
     /// <summary>
@@ -128,7 +122,6 @@ namespace MathCore.Generators.Annotations
     [AttributeUsage(
       AttributeTargets.Constructor | AttributeTargets.Method |
       AttributeTargets.Property | AttributeTargets.Delegate)]
-    [Conditional("JETBRAINS_ANNOTATIONS")]
     internal sealed class StringFormatMethodAttribute : Attribute
     {
         /// <param name="formatParameterName">
@@ -154,7 +147,6 @@ namespace MathCore.Generators.Annotations
     /// }
     /// </code></example>
     [AttributeUsage(AttributeTargets.Parameter)]
-    [Conditional("JETBRAINS_ANNOTATIONS")]
     internal sealed class StructuredMessageTemplateAttribute : Attribute { }
 
     /// <summary>
@@ -187,7 +179,6 @@ namespace MathCore.Generators.Annotations
     [AttributeUsage(
       AttributeTargets.Parameter | AttributeTargets.Property | AttributeTargets.Field,
       AllowMultiple = true)]
-    [Conditional("JETBRAINS_ANNOTATIONS")]
     internal sealed class ValueProviderAttribute : Attribute
     {
         public ValueProviderAttribute([NotNull] string name)
@@ -214,7 +205,6 @@ namespace MathCore.Generators.Annotations
       AttributeTargets.Parameter | AttributeTargets.Field | AttributeTargets.Property |
       AttributeTargets.Method | AttributeTargets.Delegate,
       AllowMultiple = true)]
-    [Conditional("JETBRAINS_ANNOTATIONS")]
     internal sealed class ValueRangeAttribute : Attribute
     {
         public object From { get; }
@@ -256,7 +246,6 @@ namespace MathCore.Generators.Annotations
     [AttributeUsage(
       AttributeTargets.Parameter | AttributeTargets.Field | AttributeTargets.Property |
       AttributeTargets.Method | AttributeTargets.Delegate)]
-    [Conditional("JETBRAINS_ANNOTATIONS")]
     internal sealed class NonNegativeValueAttribute : Attribute { }
 
     /// <summary>
@@ -271,7 +260,6 @@ namespace MathCore.Generators.Annotations
     /// }
     /// </code></example>
     [AttributeUsage(AttributeTargets.Parameter)]
-    [Conditional("JETBRAINS_ANNOTATIONS")]
     internal sealed class InvokerParameterNameAttribute : Attribute { }
 
     /// <summary>
@@ -313,7 +301,6 @@ namespace MathCore.Generators.Annotations
     /// </list>
     /// </example>
     [AttributeUsage(AttributeTargets.Method)]
-    [Conditional("JETBRAINS_ANNOTATIONS")]
     internal sealed class NotifyPropertyChangedInvocatorAttribute : Attribute
     {
         public NotifyPropertyChangedInvocatorAttribute() { }
@@ -370,7 +357,6 @@ namespace MathCore.Generators.Annotations
     /// </code></item>
     /// </list></examples>
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
-    [Conditional("JETBRAINS_ANNOTATIONS")]
     internal sealed class ContractAnnotationAttribute : Attribute
     {
         public ContractAnnotationAttribute([NotNull] string contract)
@@ -397,7 +383,6 @@ namespace MathCore.Generators.Annotations
     /// }
     /// </code></example>
     [AttributeUsage(AttributeTargets.All)]
-    [Conditional("JETBRAINS_ANNOTATIONS")]
     internal sealed class LocalizationRequiredAttribute : Attribute
     {
         public LocalizationRequiredAttribute() : this(true) { }
@@ -431,7 +416,6 @@ namespace MathCore.Generators.Annotations
     /// }
     /// </code></example>
     [AttributeUsage(AttributeTargets.Interface | AttributeTargets.Class | AttributeTargets.Struct)]
-    [Conditional("JETBRAINS_ANNOTATIONS")]
     internal sealed class CannotApplyEqualityOperatorAttribute : Attribute { }
 
     /// <summary>
@@ -447,7 +431,6 @@ namespace MathCore.Generators.Annotations
     /// </code></example>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
     [BaseTypeRequired(typeof(Attribute))]
-    [Conditional("JETBRAINS_ANNOTATIONS")]
     internal sealed class BaseTypeRequiredAttribute : Attribute
     {
         public BaseTypeRequiredAttribute([NotNull] Type baseType)
@@ -478,7 +461,6 @@ namespace MathCore.Generators.Annotations
     /// public interface IService {}
     /// </code></example>
     [AttributeUsage(AttributeTargets.All)]
-    [Conditional("JETBRAINS_ANNOTATIONS")]
     internal sealed class UsedImplicitlyAttribute : Attribute
     {
         public UsedImplicitlyAttribute()
@@ -508,7 +490,6 @@ namespace MathCore.Generators.Annotations
     /// indicates that the corresponding type is used implicitly.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.GenericParameter | AttributeTargets.Parameter)]
-    [Conditional("JETBRAINS_ANNOTATIONS")]
     internal sealed class MeansImplicitUseAttribute : Attribute
     {
         public MeansImplicitUseAttribute()
@@ -575,7 +556,6 @@ namespace MathCore.Generators.Annotations
     /// </summary>
     [MeansImplicitUse(ImplicitUseTargetFlags.WithMembers)]
     [AttributeUsage(AttributeTargets.All, Inherited = false)]
-    [Conditional("JETBRAINS_ANNOTATIONS")]
     internal sealed class PublicAPIAttribute : Attribute
     {
         public PublicAPIAttribute() { }
@@ -597,7 +577,6 @@ namespace MathCore.Generators.Annotations
     /// If <see cref="RequireAwait"/> is true, the attribute will only takes effect if the method invocation is located under the 'await' expression.
     /// </summary>
     [AttributeUsage(AttributeTargets.Parameter)]
-    [Conditional("JETBRAINS_ANNOTATIONS")]
     internal sealed class InstantHandleAttribute : Attribute
     {
         /// <summary>
@@ -619,7 +598,6 @@ namespace MathCore.Generators.Annotations
     /// }
     /// </code></example>
     [AttributeUsage(AttributeTargets.Method)]
-    [Conditional("JETBRAINS_ANNOTATIONS")]
     internal sealed class PureAttribute : Attribute { }
 
     /// <summary>
@@ -634,7 +612,6 @@ namespace MathCore.Generators.Annotations
     /// <code>[MustUseReturnValue("Use the return value to...")]</code>.
     /// </remarks>
     [AttributeUsage(AttributeTargets.Method)]
-    [Conditional("JETBRAINS_ANNOTATIONS")]
     internal sealed class MustUseReturnValueAttribute : Attribute
     {
         public MustUseReturnValueAttribute() { }
@@ -661,7 +638,6 @@ namespace MathCore.Generators.Annotations
     /// to make use of the similar analysis provided by the language/compiler.
     /// </remarks>
     [AttributeUsage(AttributeTargets.Parameter)]
-    [Conditional("JETBRAINS_ANNOTATIONS")]
     internal sealed class RequireStaticDelegateAttribute : Attribute
     {
         public bool IsError { get; set; }
@@ -685,7 +661,6 @@ namespace MathCore.Generators.Annotations
     [AttributeUsage(
       AttributeTargets.Field | AttributeTargets.Property | AttributeTargets.Parameter | AttributeTargets.Method |
       AttributeTargets.Class | AttributeTargets.Interface | AttributeTargets.Struct | AttributeTargets.GenericParameter)]
-    [Conditional("JETBRAINS_ANNOTATIONS")]
     internal sealed class ProvidesContextAttribute : Attribute { }
 
     /// <summary>
@@ -693,7 +668,6 @@ namespace MathCore.Generators.Annotations
     /// Path can be relative or absolute, starting from web root (~).
     /// </summary>
     [AttributeUsage(AttributeTargets.Parameter)]
-    [Conditional("JETBRAINS_ANNOTATIONS")]
     internal sealed class PathReferenceAttribute : Attribute
     {
         public PathReferenceAttribute() { }
@@ -730,7 +704,6 @@ namespace MathCore.Generators.Annotations
     /// </code>
     /// </example>
     [AttributeUsage(AttributeTargets.Method)]
-    [Conditional("JETBRAINS_ANNOTATIONS")]
     internal sealed class SourceTemplateAttribute : Attribute { }
 
     /// <summary>
@@ -762,7 +735,6 @@ namespace MathCore.Generators.Annotations
     /// </code>
     /// </example>
     [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Method, AllowMultiple = true)]
-    [Conditional("JETBRAINS_ANNOTATIONS")]
     internal sealed class MacroAttribute : Attribute
     {
         /// <summary>
@@ -819,7 +791,6 @@ namespace MathCore.Generators.Annotations
     /// }
     /// </code></example>
     [AttributeUsage(AttributeTargets.Method | AttributeTargets.Constructor | AttributeTargets.Property | AttributeTargets.ReturnValue)]
-    [Conditional("JETBRAINS_ANNOTATIONS")]
     internal sealed class CollectionAccessAttribute : Attribute
     {
         public CollectionAccessAttribute(CollectionAccessType collectionAccessType)
@@ -853,7 +824,6 @@ namespace MathCore.Generators.Annotations
     /// <see cref="AssertionConditionAttribute"/> attribute.
     /// </summary>
     [AttributeUsage(AttributeTargets.Method)]
-    [Conditional("JETBRAINS_ANNOTATIONS")]
     internal sealed class AssertionMethodAttribute : Attribute { }
 
     /// <summary>
@@ -862,7 +832,6 @@ namespace MathCore.Generators.Annotations
     /// the attribute is the assertion type.
     /// </summary>
     [AttributeUsage(AttributeTargets.Parameter)]
-    [Conditional("JETBRAINS_ANNOTATIONS")]
     internal sealed class AssertionConditionAttribute : Attribute
     {
         public AssertionConditionAttribute(AssertionConditionType conditionType)
@@ -895,7 +864,6 @@ namespace MathCore.Generators.Annotations
     /// </summary>
     [Obsolete("Use [ContractAnnotation('=> halt')] instead")]
     [AttributeUsage(AttributeTargets.Method)]
-    [Conditional("JETBRAINS_ANNOTATIONS")]
     internal sealed class TerminatesProgramAttribute : Attribute { }
 
     /// <summary>
@@ -904,7 +872,6 @@ namespace MathCore.Generators.Annotations
     /// of delegate type by analyzing LINQ method chains.
     /// </summary>
     [AttributeUsage(AttributeTargets.Method)]
-    [Conditional("JETBRAINS_ANNOTATIONS")]
     internal sealed class LinqTunnelAttribute : Attribute { }
 
     /// <summary>
@@ -924,14 +891,12 @@ namespace MathCore.Generators.Annotations
     /// }
     /// </code></example>
     [AttributeUsage(AttributeTargets.Parameter)]
-    [Conditional("JETBRAINS_ANNOTATIONS")]
     internal sealed class NoEnumerationAttribute : Attribute { }
 
     /// <summary>
     /// Indicates that the marked parameter, field, or property is a regular expression pattern.
     /// </summary>
     [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Field | AttributeTargets.Property)]
-    [Conditional("JETBRAINS_ANNOTATIONS")]
     internal sealed class RegexPatternAttribute : Attribute { }
 
     /// <summary>
@@ -957,7 +922,6 @@ namespace MathCore.Generators.Annotations
     /// }
     /// </code></example>
     [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Field | AttributeTargets.Property)]
-    [Conditional("JETBRAINS_ANNOTATIONS")]
     internal sealed class LanguageInjectionAttribute : Attribute
     {
         public LanguageInjectionAttribute(InjectedLanguage injectedLanguage)
@@ -983,7 +947,6 @@ namespace MathCore.Generators.Annotations
     /// </remarks>
     [AttributeUsage(
       AttributeTargets.Class | AttributeTargets.Interface | AttributeTargets.Struct | AttributeTargets.Enum)]
-    [Conditional("JETBRAINS_ANNOTATIONS")]
     internal sealed class NoReorderAttribute : Attribute { }
 
     /// <summary>
@@ -1129,7 +1092,6 @@ namespace MathCore.Generators.Annotations
       | AttributeTargets.Enum,
       AllowMultiple = true,
       Inherited = false)]
-    [Conditional("JETBRAINS_ANNOTATIONS")]
     internal sealed class CodeTemplateAttribute : Attribute
     {
         public CodeTemplateAttribute(string searchTemplate)
@@ -1188,7 +1150,6 @@ namespace MathCore.Generators.Annotations
     #region ASP.NET
 
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
-    [Conditional("JETBRAINS_ANNOTATIONS")]
     internal sealed class AspChildControlTypeAttribute : Attribute
     {
         public AspChildControlTypeAttribute([NotNull] string tagName, [NotNull] Type controlType)
@@ -1203,19 +1164,15 @@ namespace MathCore.Generators.Annotations
     }
 
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Method)]
-    [Conditional("JETBRAINS_ANNOTATIONS")]
     internal sealed class AspDataFieldAttribute : Attribute { }
 
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Method)]
-    [Conditional("JETBRAINS_ANNOTATIONS")]
     internal sealed class AspDataFieldsAttribute : Attribute { }
 
     [AttributeUsage(AttributeTargets.Property)]
-    [Conditional("JETBRAINS_ANNOTATIONS")]
     internal sealed class AspMethodPropertyAttribute : Attribute { }
 
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
-    [Conditional("JETBRAINS_ANNOTATIONS")]
     internal sealed class AspRequiredAttributeAttribute : Attribute
     {
         public AspRequiredAttributeAttribute([NotNull] string attribute)
@@ -1227,7 +1184,6 @@ namespace MathCore.Generators.Annotations
     }
 
     [AttributeUsage(AttributeTargets.Property)]
-    [Conditional("JETBRAINS_ANNOTATIONS")]
     internal sealed class AspTypePropertyAttribute : Attribute
     {
         public bool CreateConstructorReferences { get; }
@@ -1243,7 +1199,6 @@ namespace MathCore.Generators.Annotations
     #region ASP.NET MVC
 
     [AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = true)]
-    [Conditional("JETBRAINS_ANNOTATIONS")]
     internal sealed class AspMvcAreaMasterLocationFormatAttribute : Attribute
     {
         public AspMvcAreaMasterLocationFormatAttribute([NotNull] string format)
@@ -1255,7 +1210,6 @@ namespace MathCore.Generators.Annotations
     }
 
     [AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = true)]
-    [Conditional("JETBRAINS_ANNOTATIONS")]
     internal sealed class AspMvcAreaPartialViewLocationFormatAttribute : Attribute
     {
         public AspMvcAreaPartialViewLocationFormatAttribute([NotNull] string format)
@@ -1267,7 +1221,6 @@ namespace MathCore.Generators.Annotations
     }
 
     [AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = true)]
-    [Conditional("JETBRAINS_ANNOTATIONS")]
     internal sealed class AspMvcAreaViewLocationFormatAttribute : Attribute
     {
         public AspMvcAreaViewLocationFormatAttribute([NotNull] string format)
@@ -1279,7 +1232,6 @@ namespace MathCore.Generators.Annotations
     }
 
     [AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = true)]
-    [Conditional("JETBRAINS_ANNOTATIONS")]
     internal sealed class AspMvcMasterLocationFormatAttribute : Attribute
     {
         public AspMvcMasterLocationFormatAttribute([NotNull] string format)
@@ -1291,7 +1243,6 @@ namespace MathCore.Generators.Annotations
     }
 
     [AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = true)]
-    [Conditional("JETBRAINS_ANNOTATIONS")]
     internal sealed class AspMvcPartialViewLocationFormatAttribute : Attribute
     {
         public AspMvcPartialViewLocationFormatAttribute([NotNull] string format)
@@ -1303,7 +1254,6 @@ namespace MathCore.Generators.Annotations
     }
 
     [AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = true)]
-    [Conditional("JETBRAINS_ANNOTATIONS")]
     internal sealed class AspMvcViewLocationFormatAttribute : Attribute
     {
         public AspMvcViewLocationFormatAttribute([NotNull] string format)
@@ -1321,7 +1271,6 @@ namespace MathCore.Generators.Annotations
     /// <c>System.Web.Mvc.Html.ChildActionExtensions.RenderAction(HtmlHelper, String)</c>.
     /// </summary>
     [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Method | AttributeTargets.Field | AttributeTargets.Property)]
-    [Conditional("JETBRAINS_ANNOTATIONS")]
     internal sealed class AspMvcActionAttribute : Attribute
     {
         public AspMvcActionAttribute() { }
@@ -1340,7 +1289,6 @@ namespace MathCore.Generators.Annotations
     /// <c>System.Web.Mvc.Html.ChildActionExtensions.RenderAction(HtmlHelper, String)</c>.
     /// </summary>
     [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Field | AttributeTargets.Property)]
-    [Conditional("JETBRAINS_ANNOTATIONS")]
     internal sealed class AspMvcAreaAttribute : Attribute
     {
         public AspMvcAreaAttribute() { }
@@ -1360,7 +1308,6 @@ namespace MathCore.Generators.Annotations
     /// <c>System.Web.Mvc.Html.ChildActionExtensions.RenderAction(HtmlHelper, String, String)</c>.
     /// </summary>
     [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Method | AttributeTargets.Field | AttributeTargets.Property)]
-    [Conditional("JETBRAINS_ANNOTATIONS")]
     internal sealed class AspMvcControllerAttribute : Attribute
     {
         public AspMvcControllerAttribute() { }
@@ -1378,7 +1325,6 @@ namespace MathCore.Generators.Annotations
     /// for custom wrappers similar to <c>System.Web.Mvc.Controller.View(String, String)</c>.
     /// </summary>
     [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Field | AttributeTargets.Property)]
-    [Conditional("JETBRAINS_ANNOTATIONS")]
     internal sealed class AspMvcMasterAttribute : Attribute { }
 
     /// <summary>
@@ -1386,7 +1332,6 @@ namespace MathCore.Generators.Annotations
     /// for custom wrappers similar to <c>System.Web.Mvc.Controller.View(String, Object)</c>.
     /// </summary>
     [AttributeUsage(AttributeTargets.Parameter)]
-    [Conditional("JETBRAINS_ANNOTATIONS")]
     internal sealed class AspMvcModelTypeAttribute : Attribute { }
 
     /// <summary>
@@ -1396,14 +1341,12 @@ namespace MathCore.Generators.Annotations
     /// <c>System.Web.Mvc.Html.RenderPartialExtensions.RenderPartial(HtmlHelper, String)</c>.
     /// </summary>
     [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Method | AttributeTargets.Field | AttributeTargets.Property)]
-    [Conditional("JETBRAINS_ANNOTATIONS")]
     internal sealed class AspMvcPartialViewAttribute : Attribute { }
 
     /// <summary>
     /// ASP.NET MVC attribute. Allows disabling inspections for MVC views within a class or a method.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
-    [Conditional("JETBRAINS_ANNOTATIONS")]
     internal sealed class AspMvcSuppressViewErrorAttribute : Attribute { }
 
     /// <summary>
@@ -1412,7 +1355,6 @@ namespace MathCore.Generators.Annotations
     /// <c>System.Web.Mvc.Html.DisplayExtensions.DisplayForModel(HtmlHelper, String)</c>.
     /// </summary>
     [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Field | AttributeTargets.Property)]
-    [Conditional("JETBRAINS_ANNOTATIONS")]
     internal sealed class AspMvcDisplayTemplateAttribute : Attribute { }
 
     /// <summary>
@@ -1421,7 +1363,6 @@ namespace MathCore.Generators.Annotations
     /// <c>System.Web.Mvc.Html.EditorExtensions.EditorForModel(HtmlHelper, String)</c>.
     /// </summary>
     [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Field | AttributeTargets.Property)]
-    [Conditional("JETBRAINS_ANNOTATIONS")]
     internal sealed class AspMvcEditorTemplateAttribute : Attribute { }
 
     /// <summary>
@@ -1430,7 +1371,6 @@ namespace MathCore.Generators.Annotations
     /// <c>System.ComponentModel.DataAnnotations.UIHintAttribute(System.String)</c>.
     /// </summary>
     [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Field | AttributeTargets.Property)]
-    [Conditional("JETBRAINS_ANNOTATIONS")]
     internal sealed class AspMvcTemplateAttribute : Attribute { }
 
     /// <summary>
@@ -1440,7 +1380,6 @@ namespace MathCore.Generators.Annotations
     /// <c>System.Web.Mvc.Controller.View(Object)</c>.
     /// </summary>
     [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Method | AttributeTargets.Field | AttributeTargets.Property)]
-    [Conditional("JETBRAINS_ANNOTATIONS")]
     internal sealed class AspMvcViewAttribute : Attribute { }
 
     /// <summary>
@@ -1448,7 +1387,6 @@ namespace MathCore.Generators.Annotations
     /// is an MVC view component name.
     /// </summary>
     [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Field | AttributeTargets.Property)]
-    [Conditional("JETBRAINS_ANNOTATIONS")]
     internal sealed class AspMvcViewComponentAttribute : Attribute { }
 
     /// <summary>
@@ -1456,7 +1394,6 @@ namespace MathCore.Generators.Annotations
     /// is an MVC view component view. If applied to a method, the MVC view component view name is default.
     /// </summary>
     [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Method | AttributeTargets.Field | AttributeTargets.Property)]
-    [Conditional("JETBRAINS_ANNOTATIONS")]
     internal sealed class AspMvcViewComponentViewAttribute : Attribute { }
 
     /// <summary>
@@ -1471,7 +1408,6 @@ namespace MathCore.Generators.Annotations
     /// }
     /// </code></example>
     [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Property)]
-    [Conditional("JETBRAINS_ANNOTATIONS")]
     internal sealed class AspMvcActionSelectorAttribute : Attribute { }
 
     #endregion
@@ -1486,7 +1422,6 @@ namespace MathCore.Generators.Annotations
     /// to enable syntax highlighting, code completion, navigation, rename and other features in string literals.
     /// </remarks>
     [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Field | AttributeTargets.Property)]
-    [Conditional("JETBRAINS_ANNOTATIONS")]
     internal sealed class RouteTemplateAttribute : Attribute { }
 
     /// <summary>
@@ -1500,7 +1435,6 @@ namespace MathCore.Generators.Annotations
     /// and check if constraint's proposed type conflicts with matched parameter's type
     /// </remarks>
     [AttributeUsage(AttributeTargets.Class)]
-    [Conditional("JETBRAINS_ANNOTATIONS")]
     internal sealed class RouteParameterConstraintAttribute : Attribute
     {
         [NotNull] public string ConstraintName { get; }
@@ -1520,7 +1454,6 @@ namespace MathCore.Generators.Annotations
     /// in URI string literals assigned to annotated parameter, field or property.
     /// </remarks>
     [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Field | AttributeTargets.Property)]
-    [Conditional("JETBRAINS_ANNOTATIONS")]
     internal sealed class UriStringAttribute : Attribute
     {
         public UriStringAttribute() { }
@@ -1541,7 +1474,6 @@ namespace MathCore.Generators.Annotations
     /// and will add all routes to completion, navigation and other features over URI strings
     /// </remarks>
     [AttributeUsage(AttributeTargets.Method)]
-    [Conditional("JETBRAINS_ANNOTATIONS")]
     internal sealed class AspRouteConventionAttribute : Attribute
     {
         public AspRouteConventionAttribute() { }
@@ -1558,28 +1490,24 @@ namespace MathCore.Generators.Annotations
     /// Indicates that the marked method parameter contains default route values of routing convention for ASP.NET
     /// </summary>
     [AttributeUsage(AttributeTargets.Parameter)]
-    [Conditional("JETBRAINS_ANNOTATIONS")]
     internal sealed class AspDefaultRouteValuesAttribute : Attribute { }
 
     /// <summary>
     /// Indicates that the marked method parameter contains constraints on route values of routing convention for ASP.NET
     /// </summary>
     [AttributeUsage(AttributeTargets.Parameter)]
-    [Conditional("JETBRAINS_ANNOTATIONS")]
     internal sealed class AspRouteValuesConstraintsAttribute : Attribute { }
 
     /// <summary>
     /// Indicates that the marked parameter or property contains routing order provided by ASP.NET routing attribute
     /// </summary>
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Parameter)]
-    [Conditional("JETBRAINS_ANNOTATIONS")]
     internal sealed class AspRouteOrderAttribute : Attribute { }
 
     /// <summary>
     /// Indicates that the marked parameter or property contains HTTP verbs provided by ASP.NET routing attribute
     /// </summary>
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Parameter)]
-    [Conditional("JETBRAINS_ANNOTATIONS")]
     internal sealed class AspRouteVerbsAttribute : Attribute { }
 
     /// <summary>
@@ -1590,7 +1518,6 @@ namespace MathCore.Generators.Annotations
     /// and will add all routes to completion, navigation and other features over URI strings
     /// </remarks>
     [AttributeUsage(AttributeTargets.Class)]
-    [Conditional("JETBRAINS_ANNOTATIONS")]
     internal sealed class AspAttributeRoutingAttribute : Attribute
     {
         public string HttpVerb { get; set; }
@@ -1604,7 +1531,6 @@ namespace MathCore.Generators.Annotations
     /// and will add all routes to completion, navigation and other features over URI strings
     /// </remarks>
     [AttributeUsage(AttributeTargets.Method)]
-    [Conditional("JETBRAINS_ANNOTATIONS")]
     internal sealed class AspMinimalApiDeclarationAttribute : Attribute
     {
         public string HttpVerb { get; set; }
@@ -1614,7 +1540,6 @@ namespace MathCore.Generators.Annotations
     /// Indicates that the marked parameter contains ASP.NET Minimal API endpoint handler
     /// </summary>
     [AttributeUsage(AttributeTargets.Parameter)]
-    [Conditional("JETBRAINS_ANNOTATIONS")]
     internal sealed class AspMinimalApiHandlerAttribute : Attribute { }
 
     #endregion
@@ -1622,7 +1547,6 @@ namespace MathCore.Generators.Annotations
     #region Razor
 
     [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Property | AttributeTargets.Field)]
-    [Conditional("JETBRAINS_ANNOTATIONS")]
     internal sealed class HtmlElementAttributesAttribute : Attribute
     {
         public HtmlElementAttributesAttribute() { }
@@ -1636,7 +1560,6 @@ namespace MathCore.Generators.Annotations
     }
 
     [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Field | AttributeTargets.Property)]
-    [Conditional("JETBRAINS_ANNOTATIONS")]
     internal sealed class HtmlAttributeValueAttribute : Attribute
     {
         public HtmlAttributeValueAttribute([NotNull] string name)
@@ -1653,11 +1576,9 @@ namespace MathCore.Generators.Annotations
     /// <c>System.Web.WebPages.WebPageBase.RenderSection(String)</c>.
     /// </summary>
     [AttributeUsage(AttributeTargets.Parameter | AttributeTargets.Method)]
-    [Conditional("JETBRAINS_ANNOTATIONS")]
     internal sealed class RazorSectionAttribute : Attribute { }
 
     [AttributeUsage(AttributeTargets.Assembly, AllowMultiple = true)]
-    [Conditional("JETBRAINS_ANNOTATIONS")]
     internal sealed class RazorImportNamespaceAttribute : Attribute
     {
         public RazorImportNamespaceAttribute([NotNull] string name)
@@ -1669,7 +1590,6 @@ namespace MathCore.Generators.Annotations
     }
 
     [AttributeUsage(AttributeTargets.Assembly, AllowMultiple = true)]
-    [Conditional("JETBRAINS_ANNOTATIONS")]
     internal sealed class RazorInjectionAttribute : Attribute
     {
         public RazorInjectionAttribute([NotNull] string type, [NotNull] string fieldName)
@@ -1684,7 +1604,6 @@ namespace MathCore.Generators.Annotations
     }
 
     [AttributeUsage(AttributeTargets.Assembly, AllowMultiple = true)]
-    [Conditional("JETBRAINS_ANNOTATIONS")]
     internal sealed class RazorDirectiveAttribute : Attribute
     {
         public RazorDirectiveAttribute([NotNull] string directive)
@@ -1696,7 +1615,6 @@ namespace MathCore.Generators.Annotations
     }
 
     [AttributeUsage(AttributeTargets.Assembly, AllowMultiple = true)]
-    [Conditional("JETBRAINS_ANNOTATIONS")]
     internal sealed class RazorPageBaseTypeAttribute : Attribute
     {
         public RazorPageBaseTypeAttribute([NotNull] string baseType)
@@ -1714,23 +1632,18 @@ namespace MathCore.Generators.Annotations
     }
 
     [AttributeUsage(AttributeTargets.Method)]
-    [Conditional("JETBRAINS_ANNOTATIONS")]
     internal sealed class RazorHelperCommonAttribute : Attribute { }
 
     [AttributeUsage(AttributeTargets.Property)]
-    [Conditional("JETBRAINS_ANNOTATIONS")]
     internal sealed class RazorLayoutAttribute : Attribute { }
 
     [AttributeUsage(AttributeTargets.Method)]
-    [Conditional("JETBRAINS_ANNOTATIONS")]
     internal sealed class RazorWriteLiteralMethodAttribute : Attribute { }
 
     [AttributeUsage(AttributeTargets.Method)]
-    [Conditional("JETBRAINS_ANNOTATIONS")]
     internal sealed class RazorWriteMethodAttribute : Attribute { }
 
     [AttributeUsage(AttributeTargets.Parameter)]
-    [Conditional("JETBRAINS_ANNOTATIONS")]
     internal sealed class RazorWriteMethodParameterAttribute : Attribute { }
 
     #endregion
@@ -1742,7 +1655,6 @@ namespace MathCore.Generators.Annotations
     /// as <c>ItemsControl</c>-derived type, to enable inner items <c>DataContext</c> type resolve.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class)]
-    [Conditional("JETBRAINS_ANNOTATIONS")]
     internal sealed class XamlItemsControlAttribute : Attribute { }
 
     /// <summary>
@@ -1755,7 +1667,6 @@ namespace MathCore.Generators.Annotations
     /// marked with the <see cref="XamlItemsControlAttribute"/> attribute.
     /// </remarks>
     [AttributeUsage(AttributeTargets.Property)]
-    [Conditional("JETBRAINS_ANNOTATIONS")]
     internal sealed class XamlItemBindingOfItemsControlAttribute : Attribute { }
 
     /// <summary>
@@ -1768,7 +1679,6 @@ namespace MathCore.Generators.Annotations
     /// marked with the <see cref="XamlItemsControlAttribute"/> attribute.
     /// </remarks>
     [AttributeUsage(AttributeTargets.Property)]
-    [Conditional("JETBRAINS_ANNOTATIONS")]
     internal sealed class XamlItemStyleOfItemsControlAttribute : Attribute { }
 
     /// <summary>
@@ -1778,7 +1688,6 @@ namespace MathCore.Generators.Annotations
     /// This attribute must be applied to DependencyProperty's CLR accessor property if it is present, to DependencyProperty descriptor field otherwise.
     /// </remarks>
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
-    [Conditional("JETBRAINS_ANNOTATIONS")]
     internal sealed class XamlOneWayBindingModeByDefaultAttribute : Attribute { }
 
     /// <summary>
@@ -1788,7 +1697,6 @@ namespace MathCore.Generators.Annotations
     /// This attribute must be applied to DependencyProperty's CLR accessor property if it is present, to DependencyProperty descriptor field otherwise.
     /// </remarks>
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property)]
-    [Conditional("JETBRAINS_ANNOTATIONS")]
     internal sealed class XamlTwoWayBindingModeByDefaultAttribute : Attribute { }
 
     #endregion

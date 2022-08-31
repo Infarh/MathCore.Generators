@@ -6,6 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <LangVersion>preview</LangVersion>
+    <EnablePreviewFeatures>true</EnablePreviewFeatures>
     <IsRoslynComponent>true</IsRoslynComponent>
   </PropertyGroup>
 
@@ -16,7 +17,7 @@
 
   <ItemGroup>
     <Using Include="Microsoft.CodeAnalysis" />
-    <Using Include="MathCore.Generators.Annotations" />
+    <Using Include="JetBrains.Annotations" />
     <Using Include="MathCore.Generators.Infrastructure.Extensions" />
   </ItemGroup>
 

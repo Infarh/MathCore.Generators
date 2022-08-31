@@ -9,7 +9,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\MathCore.Generators\MathCore.Generators.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false"/>
-    <ProjectReference Include="..\ClassLibTests\ClassLibTests.csproj" />
   </ItemGroup>
 
 </Project>

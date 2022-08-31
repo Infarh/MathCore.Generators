@@ -1,8 +1,8 @@
 {
   "profiles": {
-    "Debug generators": {
+    "GeneratorDebug": {
       "commandName": "DebugRoslynComponent",
-      "targetProject": "..\\TestConsole\\TestConsole.csproj"
+      "targetProject": "..\\Tests\\ConsoleTests\\ConsoleTests.csproj"
     }
   }
 }

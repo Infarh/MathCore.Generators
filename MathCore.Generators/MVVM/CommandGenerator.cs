@@ -2,6 +2,9 @@
 using ClassSyntax = Microsoft.CodeAnalysis.CSharp.Syntax.ClassDeclarationSyntax;
 using System.Collections.Immutable;
 using System.Text;
+using System.Windows.Input;
+
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace MathCore.Generators.MVVM;
 
@@ -27,8 +30,11 @@ public class CommandGenerator : IIncrementalGenerator
 
     private static void Execute(Compilation Compilation, ImmutableArray<ClassSyntax> Classes, SourceProductionContext Context)
     {
+        //var command_type = Compilation.GetTypeByMetadataName(type_name);
+
         if (Classes.IsDefaultOrEmpty)
             return;
+
 
         foreach (var class_syntax in Classes)
         {
@@ -45,7 +51,6 @@ public class CommandGenerator : IIncrementalGenerator
             var source = new StringBuilder("// Auto-generated code at ")
                .AppendLine(DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss.fff"))
                .AppendLine("#nullable disable")
-               .Using("System.Windows.Input")
                .Using("MathCore.Generated.MVVM.Commands")
                .AppendLine()
                .Namespace(class_namespace)
@@ -75,6 +80,36 @@ public class CommandGenerator : IIncrementalGenerator
                         ? command_name[..^7]
                         : command_name;
 
+                    var command_class_name = "LambdaCommand";
+                    if (attribute.GetNamedArgumentNode<TypeOfExpressionSyntax>("CommandType") is { Type: { } type_of_type } type_expr_value)
+                    {
+                        if (model.GetTypeInfo(type_of_type) is { Type: { } command_class_type } type_info)
+                        {
+                            if (!type_info.HasInterface(typeof(ICommand).FullName))
+                            {
+                                Context.Error(
+                                    "MVVMCMDErr001",
+                                    "Ошибка генерации команды",
+                                    "MVVM.CMD",
+                                    $"Тип команды {command_class_name} не реализует интерфейс {typeof(ICommand).FullName}",
+                                    type_expr_value.GetLocation());
+                                break;
+                            }
+
+                            command_class_name = command_class_type.ToDisplayString();
+                        }
+                        else
+                        {
+                            Context.Error(
+                                "MVVMCMDErr002",
+                                "Ошибка генерации команды",
+                                "MVVM.CMD",
+                                $"Не удалось определить тип команды {command_class_name}",
+                                type_expr_value.GetLocation());
+                            break;
+                        }
+                    }
+
                     string? can_execute_method_name = null;
                     if (class_symbol
                            .GetMembers($"Can{command_name_trimmed}Execute")
@@ -85,24 +120,21 @@ public class CommandGenerator : IIncrementalGenerator
                     if (can_execute_method_name is null && class_symbol
                            .GetMembers()
                            .OfType<IMethodSymbol>()
-                           .FirstOrDefault(m => m.GetAttributeLike("Command") is { } attr 
-                                && attr.NamedArgument<string>("CommandName") == command_name 
+                           .FirstOrDefault(m => m.GetAttributeLike("Command") is { } attr
+                                && attr.NamedArgument<string>("CommandName") == command_name
                                 && m.ReturnType.Name == "Boolean") is { } other_can_execute_method)
                         can_execute_method_name = other_can_execute_method.Name;
 
-                    source.Append("    #region {0}", command_name).LN();
-                    source.LN();
-                    source.Append("    private ICommand _{0};", command_name).LN();
 
-                    source.LN();
-                    source.Append("    public ICommand {0} => _{0} ??=", command_name).LN();
-                    source.Append("        new LambdaCommand(").Append(execute_method_name);
-                    if (can_execute_method_name is not null)
-                        source.Append(", ").Append(can_execute_method_name);
-                    source.Append(");").LN();
-
-                    source.LN();
-                    source.Append("    #endregion").LN();
+                    using (source.Region(command_name))
+                    {
+                        source.Append("    private System.Windows.Input.ICommand _{0};", command_name).LN().LN();
+                        source.Append("    public System.Windows.Input.ICommand {0} => _{0} ??=", command_name).LN();
+                        source.Append("        new {0}(", command_class_name).Append(execute_method_name);
+                        if (can_execute_method_name is not null)
+                            source.Append(", ").Append(can_execute_method_name);
+                        source.Append(");").LN();
+                    }
                 }
 
             source.AppendLine("}");
@@ -119,11 +151,17 @@ public class CommandGenerator : IIncrementalGenerator
     {
         var result = MethodName;
 
-        if (result.Length > 2 && result.StartsWith("On"))
-            result = result[2..];
+        if (result is ['O', 'n', .. { Length: > 0 } tail])
+            result = tail;
 
-        if (result.Length > 8 && result.EndsWith("Executed"))
-            result = result[..^8];
+        if(result is [.. { Length: > 0 } head, 'E', 'x', 'e', 'c', 'u', 't', 'e', 'd'])
+            result = head;
+
+        //if (result.Length > 2 && result.StartsWith("On"))
+        //    result = result[2..];
+
+        //if (result.Length > 8 && result.EndsWith("Executed"))
+        //    result = result[..^8];
 
         return result.EndsWith("Command") ? result : $"{result}Command";
     }
