@@ -2,12 +2,7 @@
 
 internal static class TypeInfoEx
 {
-    public static bool HasInterface(this TypeInfo type, string InterfaceName)
-    {
-        foreach (var @interface in type.Type.AllInterfaces)
-            if (@interface.ToDisplayString() == InterfaceName)
-                return true;
-
-        return false;
-    }
+    public static bool HasInterface(this TypeInfo type, string InterfaceName) => 
+        type is { Type.AllInterfaces: { Length: > 0 } all_interfaces } &&
+        Enumerable.Any(all_interfaces, i => i.ToDisplayString() == InterfaceName);
 }

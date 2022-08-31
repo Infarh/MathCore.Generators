@@ -22,16 +22,16 @@ internal static class AttributeDataExtensions
 
                 foreach (var argument in arguments)
                     if (argument.NameEquals is { Name.Identifier.ValueText: var argument_name } && argument_name == ArgumentName)
-                        //return (T)((LiteralExpressionSyntax)argument.Expression).Token.Value!;
                         switch (argument.Expression)
                         {
-                            case LiteralExpressionSyntax { Token.Value: T t_value }:
-                                return t_value;
+                            case LiteralExpressionSyntax { Token.Value: T value }:
+                                return value;
 
-                            case TypeOfExpressionSyntax { Type: IdentifierNameSyntax { Identifier.Value: var type_identifier } type_info } type_expr:
-                                var qq1 = type_expr.ToFullString();
-                                var qq2 = type_info.ToFullString();
-                                return (T?)type_identifier;
+                            case TypeOfExpressionSyntax { Type: IdentifierNameSyntax { Identifier.Value: T value } }:
+                                return value;
+
+                            case InvocationExpressionSyntax { ArgumentList.Arguments: [ { Expression: IdentifierNameSyntax { Identifier.Value: T value } } ] }:
+                                return value;
                         }
 
                 return DefaultValue;

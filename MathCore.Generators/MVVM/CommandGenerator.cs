@@ -70,8 +70,6 @@ public class CommandGenerator : IIncrementalGenerator
                     else
                         source.LN();
 
-                    //Debugger.Launch();
-
                     var execute_method_name = execute_method.Name;
                     var command_name = attribute.NamedArgument<string>("CommandName")
                         ?? GetCommandName(execute_method_name);
@@ -80,38 +78,8 @@ public class CommandGenerator : IIncrementalGenerator
                         ? command_name[..^7]
                         : command_name;
 
-                    var command_class_name = "LambdaCommand";
-                    if (attribute.GetNamedArgumentNode<TypeOfExpressionSyntax>("CommandType") is { Type: { } type_of_type } type_expr_value)
-                    {
-                        if (model.GetTypeInfo(type_of_type) is { Type: { } command_class_type } type_info)
-                        {
-                            if (!type_info.HasInterface(typeof(ICommand).FullName))
-                            {
-                                Context.Error(
-                                    "MVVMCMDErr001",
-                                    "Ошибка генерации команды",
-                                    "MVVM.CMD",
-                                    $"Тип команды {command_class_name} не реализует интерфейс {typeof(ICommand).FullName}",
-                                    type_expr_value.GetLocation());
-                                break;
-                            }
-
-                            command_class_name = command_class_type.ToDisplayString();
-                        }
-                        else
-                        {
-                            Context.Error(
-                                "MVVMCMDErr002",
-                                "Ошибка генерации команды",
-                                "MVVM.CMD",
-                                $"Не удалось определить тип команды {command_class_name}",
-                                type_expr_value.GetLocation());
-                            break;
-                        }
-                    }
-
-                    string? can_execute_method_name = null;
-                    if (class_symbol
+                    var can_execute_method_name = attribute.NamedArgument<string>("CanExecuteMethodName");
+                    if (can_execute_method_name is null && class_symbol
                            .GetMembers($"Can{command_name_trimmed}Execute")
                            .OfType<IMethodSymbol>().FirstOrDefault(m => m.Parameters is { Length: 1 }) is { } can_execute_method
                         && can_execute_method.HasAttributeLike("Command"))
@@ -125,6 +93,60 @@ public class CommandGenerator : IIncrementalGenerator
                                 && m.ReturnType.Name == "Boolean") is { } other_can_execute_method)
                         can_execute_method_name = other_can_execute_method.Name;
 
+                    var command_class_name = "LambdaCommand";
+                    if (attribute.GetNamedArgumentNode<TypeOfExpressionSyntax>("CommandType") is { Type: { } type_of_type } type_expr_value)
+                    {
+                        if (model.GetTypeInfo(type_of_type) is { Type: INamedTypeSymbol { Constructors: var constructors } command_class_type } type_info)
+                        {
+                            if (!type_info.HasInterface(typeof(ICommand).FullName))
+                            {
+                                Context.Error(
+                                    "MVVMCMDErr001",
+                                    "Ошибка генерации команды",
+                                    "MVVM.CMD",
+                                    $"Тип команды {command_class_name} не реализует интерфейс {typeof(ICommand).FullName}",
+                                    type_expr_value.GetLocation());
+                                break;
+                            }
+
+                            if (can_execute_method_name is null)
+                            {
+                                if (!constructors.Any(IsOneParameterCtor) && !constructors.Any(IsTwoParameterWithOptionalCtor))
+                                {
+                                    Context.Error(
+                                        "MVVMCMDErr002",
+                                        "Ошибка генерации команды",
+                                        "MVVM.CMD",
+                                        $"Тип команды {command_class_name} не содержит конструктор с одним параметром Action<object>, либо в двумя параметрами Action<object>, Func<object, bool>? = null",
+                                        type_expr_value.GetLocation());
+                                    break;
+                                }
+                            }
+                            else
+                            if (!constructors.Any(IsTwoParametersCtor))
+                            {
+                                Context.Error(
+                                    "MVVMCMDErr003",
+                                    "Ошибка генерации команды",
+                                    "MVVM.CMD",
+                                    $"Тип команды {command_class_name} не содержит конструктор с двумя параметрами Action<object>, Func<object, bool>",
+                                    type_expr_value.GetLocation());
+                                break;
+                            }
+
+                            command_class_name = command_class_type.ToDisplayString();
+                        }
+                        else
+                        {
+                            Context.Error(
+                                "MVVMCMDErr004",
+                                "Ошибка генерации команды",
+                                "MVVM.CMD",
+                                $"Не удалось определить тип команды {command_class_name}",
+                                type_expr_value.GetLocation());
+                            break;
+                        }
+                    }
 
                     using (source.Region(command_name))
                     {
@@ -147,6 +169,21 @@ public class CommandGenerator : IIncrementalGenerator
         }
     }
 
+    private static bool IsOneParameterCtor(IMethodSymbol Ctor) =>
+        Ctor.Parameters is [{ } on_executed] &&
+        on_executed.ToDisplayString() is "System.Action<object>" or "System.Action<object?>";
+
+    private static bool IsTwoParameterWithOptionalCtor(IMethodSymbol Ctor) =>
+        Ctor.Parameters is [ { } on_executed, { } can_execute]
+        && on_executed.ToDisplayString() is "System.Action<object>" or "System.Action<object?>"
+        && can_execute.ToDisplayString().TrimEnd('?') is "System.Func<object, bool>" or "System.Func<object?, bool>"
+        && can_execute.IsOptional;
+
+    private static bool IsTwoParametersCtor(IMethodSymbol Ctor) =>
+        Ctor.Parameters is [ { } on_executed, { } can_execute]
+        && on_executed.ToDisplayString() is "System.Action<object>" or "System.Action<object?>"
+        && can_execute.ToDisplayString().TrimEnd('?') is "System.Func<object, bool>" or "System.Func<object?, bool>";
+
     private static string GetCommandName(string MethodName)
     {
         var result = MethodName;
@@ -154,7 +191,7 @@ public class CommandGenerator : IIncrementalGenerator
         if (result is ['O', 'n', .. { Length: > 0 } tail])
             result = tail;
 
-        if(result is [.. { Length: > 0 } head, 'E', 'x', 'e', 'c', 'u', 't', 'e', 'd'])
+        if (result is [.. { Length: > 0 } head, 'E', 'x', 'e', 'c', 'u', 't', 'e', 'd'])
             result = head;
 
         //if (result.Length > 2 && result.StartsWith("On"))

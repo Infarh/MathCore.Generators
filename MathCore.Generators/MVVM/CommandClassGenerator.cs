@@ -1,5 +1,4 @@
-﻿using System.Drawing;
-using System.Text;
+﻿using System.Text;
 
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
@@ -30,17 +29,28 @@ public class CommandClassGenerator : ISourceGenerator
         }
     }
 
-    public void Initialize(GeneratorInitializationContext context)
-    {
-        context.RegisterForSyntaxNotifications(() => new SyntaxReceiver());
-    }
+    public void Initialize(GeneratorInitializationContext context) => context.RegisterForSyntaxNotifications(() => new SyntaxReceiver());
 
     public void Execute(GeneratorExecutionContext context)
     {
-        if(context.SyntaxReceiver is not SyntaxReceiver { CommandAttributeExists: true } receiver) 
+        if (context.SyntaxReceiver is not SyntaxReceiver { CommandAttributeExists: true }) 
             return;
 
-        const string NameSpace = "MathCore.Generated.MVVM";
+        var can_execute_changed_event = context.Compilation.ReferencedAssemblyNames.Any(asm => asm.Name == "PresentationCore") 
+            ? """
+        public event EventHandler? CanExecuteChanged
+        {
+            add => CommandManager.RequerySuggested += value;
+            remove => CommandManager.RequerySuggested -= value;
+        }
+"""
+        : """
+        public event EventHandler? CanExecuteChanged;
+
+        public virtual void OnCanExecuteChanged(EventArgs? e = null) => CanExecuteChanged?.Invoke(this, e ?? EventArgs.Empty);
+""";
+
+        const string name_space = "MathCore.Generated.MVVM";
 
         context.AddSource("MVVM.Command.g.cs", SourceText.From(
 $$"""
@@ -49,11 +59,11 @@ $$"""
 using System;
 using System.Windows.Input;
 
-namespace {{NameSpace}}.Commands.Base
+namespace {{name_space}}.Commands.Base
 {
     public abstract class Command : ICommand
     {
-        public event EventHandler? CanExecuteChanged;
+{{can_execute_changed_event}}
 
         protected virtual void OnCanExecuteChanged(EventArgs e) => CanExecuteChanged?.Invoke(this, e);
 
@@ -71,7 +81,7 @@ namespace {{NameSpace}}.Commands.Base
     }
 }
 
-namespace {{NameSpace}}.Commands
+namespace {{name_space}}.Commands
 {
     public class LambdaCommand : Base.Command
     {
@@ -79,8 +89,8 @@ namespace {{NameSpace}}.Commands
 
         private readonly Func<object?, bool>? _CanExecute;
 
-        public LambdaCommand(Action Execute, Func<bool>? CanExecute = null) 
-            : this(_ => Execute(), CanExecute is null ? null : _ => CanExecute()) 
+        public LambdaCommand(Action Execute, Func<bool>? CanExecute = null)
+            : this(_ => Execute(), CanExecute is null ? null : _ => CanExecute())
         {
 
         }

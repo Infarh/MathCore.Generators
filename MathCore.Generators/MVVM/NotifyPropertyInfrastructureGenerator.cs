@@ -40,9 +40,6 @@ public class NotifyPropertyInfrastructureGenerator : ISourceGenerator
 
             var command_attribute_source = GetCommandAttributeSourceText(name_space.TrimEnd(".MVVM"));
             context.AddSource("CommandAttribute.g.cs", command_attribute_source);
-
-            //var command_source = GetICommandImplementationSourceText(name_space);
-            //context.AddSource("Command.g.cs", command_source);
         }
         catch (Exception e)
         {
@@ -79,64 +76,9 @@ internal class CommandAttribute : System.Attribute
 {
     public string? CommandName { get; set; }
 
+    public string? CanExecuteMethodName { get; set; }
+
     public Type? CommandType { get; set; }
-}
-""";
-
-    public static SourceText GetICommandImplementationSourceText(string Namespace) => SourceText.From(GetICommandImplementationSource(Namespace), Encoding.UTF8);
-
-    public static string GetICommandImplementationSource(string NameSpace) => $$"""
-// Auto-generated code at {{DateTime.Now:dd.MM.yyyy HH:mm:ss.fff}}
-#nullable enable
-using System;
-using System.Windows.Input;
-
-namespace {{NameSpace}}.Commands.Base
-{
-    public abstract class Command : ICommand
-    {
-        public event EventHandler? CanExecuteChanged;
-
-        protected virtual void OnCanExecuteChanged(EventArgs e) => CanExecuteChanged?.Invoke(this, e);
-
-        bool ICommand.CanExecute(object? parameter) => CanExecute(parameter);
-
-        void ICommand.Execute(object? parameter)
-        {
-            if(!CanExecute(parameter)) return;
-            Execute(parameter);
-        }
-
-        protected virtual bool CanExecute(object? parameter) => true;
-
-        protected abstract void Execute(object? parameter);
-    }
-}
-
-namespace {{NameSpace}}.Commands
-{
-    public class LambdaCommand : Base.Command
-    {
-        private readonly Action<object?> _Execute;
-
-        private readonly Func<object?, bool>? _CanExecute;
-
-        public LambdaCommand(Action Execute, Func<bool>? CanExecute = null) 
-            : this(_ => Execute(), CanExecute is null ? null : _ => CanExecute()) 
-        {
-
-        }
-
-        public LambdaCommand(Action<object?> Execute, Func<object?, bool>? CanExecute = null)
-        {
-            _Execute = Execute;
-            _CanExecute = CanExecute;
-        }
-
-        protected override bool CanExecute(object? parameter) => base.CanExecute(parameter) && _CanExecute?.Invoke(parameter) == true;
-
-        protected override void Execute(object? parameter) => _Execute(parameter);
-    }
 }
 """;
 }

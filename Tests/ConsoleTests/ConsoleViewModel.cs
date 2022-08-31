@@ -8,10 +8,12 @@ public partial class ConsoleViewModel
     //[NotifyProperty]
     private string? _Title;
 
-    //[Command(CommandName = "TestCommand123"/*, CommandType = typeof(CorrectCommand)*/)]
-    private void OnTestCommandExecuted() { }
+    [Command(CommandName = "TestCommand123", CommandType = typeof(CorrectCommand), CanExecuteMethodName = nameof(CanTest123CommandExecute))]
+    private void OnTestCommandExecuted(object p) { }
 
-    [Command]
+    private bool CanTest123CommandExecute(object? p) => p is not null;
+
+    //[Command]
     private void OnTest2CommandExecuted() { }
 
     public void Test()
@@ -39,6 +41,13 @@ interface ICommand
 
 class CorrectCommand : System.Windows.Input.ICommand
 {
+    //public CorrectCommand(Action<object> OnExecute) { }
+
+    public CorrectCommand(Action<object> OnExecute, Func<object?,bool>? CanExecute = null)
+    {
+
+    }
+
     public bool CanExecute(object? parameter) => throw new NotImplementedException();
 
     public void Execute(object? parameter) => throw new NotImplementedException();
