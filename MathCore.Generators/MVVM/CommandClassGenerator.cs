@@ -36,7 +36,7 @@ public class CommandClassGenerator : ISourceGenerator
         if (context.SyntaxReceiver is not SyntaxReceiver { CommandAttributeExists: true }) 
             return;
 
-        var can_execute_changed_event = context.Compilation.ReferencedAssemblyNames.Any(asm => asm.Name == "PresentationCore") 
+        var can_execute_changed_event = context.Compilation.ReferencedAssemblyNames.Any(static asm => asm.Name == "PresentationCore") 
             ? """
         public event EventHandler? CanExecuteChanged
         {
@@ -64,8 +64,6 @@ namespace {{name_space}}.Commands.Base
     public abstract class Command : ICommand
     {
 {{can_execute_changed_event}}
-
-        protected virtual void OnCanExecuteChanged(EventArgs e) => CanExecuteChanged?.Invoke(this, e);
 
         bool ICommand.CanExecute(object? parameter) => CanExecute(parameter);
 

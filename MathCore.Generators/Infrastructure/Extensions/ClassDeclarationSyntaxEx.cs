@@ -9,8 +9,8 @@ internal static class ClassDeclarationSyntaxEx
     public static bool IsStatic(this ClassDeclarationSyntax Class) => Class.Modifiers.Any(m => m.ValueText == "static");
 
     public static IEnumerable<string> EnumAccessModifiers(this ClassDeclarationSyntax Class) => Class.Modifiers
-       .Select(m => m.ValueText)
-       .Where(m => m is "public" or "private" or "internal");
+       .Select(static m => m.ValueText)
+       .Where(static m => m is "public" or "private" or "internal");
 
     public static BaseNamespaceDeclarationSyntax? GetNamespace(this ClassDeclarationSyntax Class)
     {

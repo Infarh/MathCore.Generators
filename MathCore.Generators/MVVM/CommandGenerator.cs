@@ -17,7 +17,7 @@ public class CommandGenerator : IIncrementalGenerator
                 static (node, _) => node is ClassSyntax { Members: var members } @class
                     && @class.IsPartial()
                     && !@class.IsStatic()
-                    && members.OfType<MethodSyntax>().Any(method => !method.IsStatic() && method.IsCommandHandlerMethod()),
+                    && members.OfType<MethodSyntax>().Any(static method => !method.IsStatic() && method.IsCommandHandlerMethod()),
                 static (context, _) => context.Node as ClassSyntax)
            .Where(static c => c is not null);
 
@@ -81,7 +81,7 @@ public class CommandGenerator : IIncrementalGenerator
                     var can_execute_method_name = attribute.NamedArgument<string>("CanExecuteMethodName");
                     if (can_execute_method_name is null && class_symbol
                            .GetMembers($"Can{command_name_trimmed}Execute")
-                           .OfType<IMethodSymbol>().FirstOrDefault(m => m.Parameters is { Length: 1 }) is { } can_execute_method
+                           .OfType<IMethodSymbol>().FirstOrDefault(static m => m.Parameters is { Length: 1 }) is { } can_execute_method
                         && can_execute_method.HasAttributeLike("Command"))
                         can_execute_method_name = can_execute_method.Name;
 
@@ -162,7 +162,7 @@ public class CommandGenerator : IIncrementalGenerator
             source.AppendLine("}");
 
 #if DEBUG
-            var source_test = source.EnumLines((s, i) => $"{i + 1,3}|{s}").JoinString(Environment.NewLine);
+            var source_test = source.EnumLines(static (s, i) => $"{i + 1,3}|{s}").JoinString(Environment.NewLine);
 #endif
 
             Context.AddSource($"{class_name}.commands.g.cs", source.ToSource());

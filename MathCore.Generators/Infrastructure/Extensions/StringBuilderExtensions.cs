@@ -54,6 +54,7 @@ public static class StringBuilderExtensions
         new(builder, RegionName, Ident, FreeLineOffset);
 
     public static StringBuilder AddProperty(this StringBuilder source, string Type, string FieldName, string PropertyName) => source
+        .Append("    public {0} {1}", Type, PropertyName).LN()
         .Append("    {").LN()
         .Append("        get => {0};", FieldName).LN()
         .Append("        set => {0} = value;", FieldName).LN()

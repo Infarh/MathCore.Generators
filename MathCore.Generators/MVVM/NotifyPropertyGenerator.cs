@@ -20,7 +20,7 @@ public class NotifyPropertyGenerator : IIncrementalGenerator
                 static (node, _) => node is ClassSyntax { Members: var members } @class
                     && @class.IsPartial()
                     && !@class.IsStatic()
-                    && members.OfType<FieldSyntax>().Any(field => !field.IsStatic() && !field.IsReadonly() && field.IsNotifyPropertyField()),
+                    && members.OfType<FieldSyntax>().Any(static field => !field.IsStatic() && !field.IsReadonly() && field.IsNotifyPropertyField()),
                 static (context, _) => context.Node as ClassSyntax)
            .Where(static s => s is not null)
            .Collect();
@@ -53,7 +53,7 @@ public class NotifyPropertyGenerator : IIncrementalGenerator
                    .GetMembers()
                    .OfType<IFieldSymbol>()
                    .Any(
-                        field => !field.IsReadOnly && !field.IsStatic
+                        static field => !field.IsReadOnly && !field.IsStatic
                             && field.GetAttributeLike("NotifyProperty") is { } attribute
                             && attribute.NamedArgument("INotifyPropertyChangesImplementation", true)))
             {
@@ -75,7 +75,7 @@ public class NotifyPropertyGenerator : IIncrementalGenerator
             source.AppendLine("{");
 
             var is_first = true;
-            foreach (var field in class_symbol.GetMembers().OfType<IFieldSymbol>().Where(field => !field.IsReadOnly && !field.IsStatic))
+            foreach (var field in class_symbol.GetMembers().OfType<IFieldSymbol>().Where(static field => !field.IsReadOnly && !field.IsStatic))
                 if (field.GetAttributeLike("NotifyProperty") is { } attribute)
                 {
                     if (is_first)
@@ -103,7 +103,7 @@ public class NotifyPropertyGenerator : IIncrementalGenerator
             source.AppendLine("}");
 
 #if DEBUG
-            var source_test = source.EnumLines((s, i) => $"{i + 1,3}|{s}").JoinString(Environment.NewLine);
+            var source_test = source.EnumLines(static (s, i) => $"{i + 1,3}|{s}").JoinString(Environment.NewLine);
 #endif
 
             Context.AddSource($"{class_name}.properties.g.cs", source.ToSource());
@@ -115,7 +115,7 @@ public class NotifyPropertyGenerator : IIncrementalGenerator
         for (var class_definition = ClassDefinition; class_definition is not null; class_definition = class_definition.BaseType)
         {
             var interfaces = class_definition.Interfaces;
-            if (interfaces.Length > 0 && interfaces.Any(v => v.Name == nameof(INotifyPropertyChanged)))
+            if (interfaces.Length > 0 && interfaces.Any(static v => v.Name == nameof(INotifyPropertyChanged)))
                 return true;
         }
 

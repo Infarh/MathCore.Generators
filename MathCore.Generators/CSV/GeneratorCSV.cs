@@ -33,7 +33,7 @@ internal class CSVColumnAttribute : System.Attribute
 
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
-        context.RegisterPostInitializationOutput(c => c.AddSource("GeneratorCSV.Attribute.g.cs", CreateAttribute()));
+        context.RegisterPostInitializationOutput(static c => c.AddSource("GeneratorCSV.Attribute.g.cs", CreateAttribute()));
 
         var classes = context.SyntaxProvider.CreateSyntaxProvider(
                 static (n, _) => n is ClassDeclarationSyntax @class && @class.AttributeLists.ExistAttribute("CSVClass"),
@@ -60,7 +60,7 @@ internal class CSVColumnAttribute : System.Attribute
         cancel.ThrowIfCancellationRequested();
 
         var model = Compilation.GetSemanticModel(Class.SyntaxTree);
-        var class_symbol = model.GetDeclaredSymbol(Class, cancel);
+        //var class_symbol = model.GetDeclaredSymbol(Class, cancel);
 
         if (!Class.IsPartial())
         {
@@ -230,16 +230,12 @@ internal class CSVColumnAttribute : System.Attribute
 
     private static bool FieldSelector(FieldDeclarationSyntax field, SourceProductionContext Context)
     {
-        var param_type = typeof(int);
-        var list_type = typeof(List<>).MakeGenericType(param_type);
-        var list = Activator.CreateInstance(list_type);
-        
-        if (field.Modifiers.Any(m => m.ValueText is "static"))
+        if (field.Modifiers.Any(static m => m.ValueText is "static"))
         {
             if (!field.AttributeLists.ExistAttribute("CSVColumn"))
                 return false;
 
-            var static_modifier = field.Modifiers.First(m => m.ValueText is "static");
+            var static_modifier = field.Modifiers.First(static m => m.ValueText is "static");
 
             Context.Error("GenCSVErr003", "Генератор CSV", "CSV", "Поле не должно быть статическим", static_modifier.GetLocation());
             //var descriptor = new DiagnosticDescriptor(
@@ -280,11 +276,11 @@ internal class CSVColumnAttribute : System.Attribute
 
     private static bool PropertySelector(PropertyDeclarationSyntax property, SourceProductionContext Context)
     {
-        if (property.Modifiers.Any(m => m.ValueText is "static"))
+        if (property.Modifiers.Any(static m => m.ValueText is "static"))
         {
             if (property.AttributeLists.ExistAttribute("CSVColumn"))
             {
-                var static_modifier = property.Modifiers.First(m => m.ValueText is "static");
+                var static_modifier = property.Modifiers.First(static m => m.ValueText is "static");
 
             Context.Error("GenCSVErr005", "Генератор CSV", "CSV", "Свойство не должно быть статическим", static_modifier.GetLocation());
                 //var descriptor = new DiagnosticDescriptor(
