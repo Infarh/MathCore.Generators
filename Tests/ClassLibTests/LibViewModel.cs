@@ -4,7 +4,7 @@ namespace ClassLibTests;
 
 public partial class LibViewModel
 {
-    //[NotifyProperty]
+    [NotifyProperty]
     private string? _Title;
 
     //[Command(CommandName = "TestCommand123")]
@@ -12,7 +12,7 @@ public partial class LibViewModel
 
     public void Test()
     {
-        //Title = "123";
+        Title = "123";
         //TestCommand123.Execute(null);
     }
 }

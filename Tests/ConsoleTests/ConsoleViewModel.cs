@@ -1,26 +1,26 @@
-﻿using MathCore.Generated.MVVM;
-using MathCore.Generated.MVVM.Commands;
+﻿
+using MathCore.Generated.MVVM;
 
 namespace ConsoleTests;
 
 public partial class ConsoleViewModel
 {
-    //[NotifyProperty]
+    [NotifyProperty]
     private string? _Title;
 
-    [Command(CommandName = "TestCommand123", CommandType = typeof(CorrectCommand), CanExecuteMethodName = nameof(CanTest123CommandExecute))]
+    //[Command(CanExecuteMethodName = nameof(CanTestCommandExecute))]
     private void OnTestCommandExecuted(object p) { }
 
-    private bool CanTest123CommandExecute(object? p) => p is not null;
+    private bool CanTestCommandExecute(object? p) => p is not null;
 
     //[Command]
-    private void OnTest2CommandExecuted() { }
+    //private void OnTest2CommandExecuted() { }
 
     public void Test()
     {
-        LambdaCommand cmd;
+        //LambdaCommand cmd;
         //Title = "123";
-        //TestCommand123.Execute(null);
+        //TestCommand.Execute(null);
     }
 }
 

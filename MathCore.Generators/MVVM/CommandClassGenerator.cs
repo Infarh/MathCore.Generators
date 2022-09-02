@@ -10,22 +10,23 @@ public class CommandClassGenerator : ISourceGenerator
 {
     private class SyntaxReceiver : ISyntaxReceiver
     {
-        private bool _CommandAttributeExists;
-
-        public bool CommandAttributeExists => _CommandAttributeExists;
+        public bool CommandAttributeExists { get; private set; }
 
         public void OnVisitSyntaxNode(SyntaxNode Node)
         {
-            if(_CommandAttributeExists || Node is not MethodDeclarationSyntax { AttributeLists: { Count: > 0 } method_attributes_list } method_node || method_node.IsStatic())
+            if(CommandAttributeExists || Node is not MethodDeclarationSyntax { AttributeLists: { Count: > 0 } method_attributes_list } method_node || method_node.IsStatic())
                 return;
 
-            foreach (var method_attributes in method_attributes_list)
-                foreach (var attributes in method_attributes.Attributes)
-                    if (attributes.Name.ToFullString() is "Command" or "CommandAttribute")
-                    {
-                        _CommandAttributeExists = true;
-                        return;
-                    }
+            if (method_attributes_list.SelectMany(a => a.Attributes).Any(a => a.Name.ToFullString() is "Command" or "CommandAttribute")) 
+                CommandAttributeExists = true;
+
+            //foreach (var method_attributes in method_attributes_list)
+            //    foreach (var attributes in method_attributes.Attributes)
+            //        if (attributes.Name.ToFullString() is "Command" or "CommandAttribute")
+            //        {
+            //            _CommandAttributeExists = true;
+            //            return;
+            //        }
         }
     }
 

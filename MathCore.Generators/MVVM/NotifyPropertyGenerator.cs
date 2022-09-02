@@ -35,7 +35,7 @@ public class NotifyPropertyGenerator : IIncrementalGenerator
         if (Classes.IsDefaultOrEmpty)
             return;
 
-        foreach (var class_syntax in Classes)
+        foreach (var class_syntax in Classes) 
         {
             var model = Compilation.GetSemanticModel(class_syntax.SyntaxTree);
 

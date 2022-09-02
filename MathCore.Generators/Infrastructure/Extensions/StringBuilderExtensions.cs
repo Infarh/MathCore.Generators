@@ -83,7 +83,7 @@ public static class StringBuilderExtensions
             source.Append("        set").LN();
             source.Append("        {").LN();
             source.Append("            if(Equals(value, {0})) return;", FieldName).LN();
-            source.Append("            {0} = value;").LN();
+            source.Append("            {0} = value;", FieldName).LN();
             source.Append("            {0}Changed?.Invoke(this, System.EventArgs.Empty);", PropertyName).LN();
             source.Append("        }").LN();
             source.Append("    }").LN();

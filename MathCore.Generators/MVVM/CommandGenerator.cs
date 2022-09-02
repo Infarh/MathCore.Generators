@@ -188,12 +188,15 @@ public class CommandGenerator : IIncrementalGenerator
     {
         var result = MethodName;
 
+        if (result is [ 'O', 'n', .. { Length: > 0 } value, 'E', 'x', 'e', 'c', 'u', 't', 'e', 'd'])
+            result = value;
+
         if (result is ['O', 'n', .. { Length: > 0 } tail])
             result = tail;
 
         if (result is [.. { Length: > 0 } head, 'E', 'x', 'e', 'c', 'u', 't', 'e', 'd'])
             result = head;
-
+        
         //if (result.Length > 2 && result.StartsWith("On"))
         //    result = result[2..];
 
