@@ -21,10 +21,8 @@ public class CommandGenerator : IIncrementalGenerator
                 static (context, _) => context.Node as ClassSyntax)
            .Where(static c => c is not null);
 
-        var compilations = context.CompilationProvider.Combine(classes.Collect());
-
         context.RegisterSourceOutput(
-            compilations,
+            context.CompilationProvider.Combine(classes.Collect()),
             static (compilation, source) => Execute(source.Left, source.Right!, compilation));
     }
 
@@ -50,7 +48,7 @@ public class CommandGenerator : IIncrementalGenerator
 
             var source = new StringBuilder("// Auto-generated code at ")
                .AppendLine(DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss.fff"))
-               .AppendLine("#nullable disable")
+               .Nullable()
                .Using("MathCore.Generated.MVVM.Commands")
                .AppendLine()
                .Namespace(class_namespace)

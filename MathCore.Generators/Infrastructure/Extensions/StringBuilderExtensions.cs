@@ -12,6 +12,8 @@ public static class StringBuilderExtensions
 
     public static SourceText ToSource(this StringBuilder builder) => SourceText.From(builder.ToString(), Encoding.UTF8);
 
+    public static string ToNumeratedLinesString(this StringBuilder builder) => builder.EnumLines(static (s, i) => $"{i + 1,3}|{s}").JoinStringLN();
+
     public static StringBuilder Using(this StringBuilder builder, string NameSpace) => builder
        .Append("using ")
        .Append(NameSpace)
@@ -21,6 +23,8 @@ public static class StringBuilderExtensions
        .Append("namespace ")
        .Append(Namespace)
        .AppendLine(";");
+
+    public static StringBuilder Nullable(this StringBuilder builder, bool Enable = true) => builder.AppendLine(Enable ? "#nullable enable" : "#nullable disable");
 
     public static StringWriter CreateWriter(this StringBuilder builder) => new(builder);
 
@@ -104,7 +108,7 @@ public static class StringBuilderExtensions
            .ToString()
            .Split(new[] { Environment.NewLine }, StringSplitOptions.None)
            .Select((s, i) => $"{i + 1,3}{Separator}{s}")
-           .JoinString(Environment.NewLine);
+           .JoinStringLN();
 
     [StringFormatMethod("Format")]
     public static StringBuilder Append(this StringBuilder builder, string Format, object arg0) => builder.AppendFormat(Format, arg0);
@@ -118,8 +122,28 @@ public static class StringBuilderExtensions
     [StringFormatMethod("Format")]
     public static StringBuilder Append(this StringBuilder builder, string Format, params object[] args) => builder.AppendFormat(Format, args);
 
+    [StringFormatMethod("Format")]
+    public static StringBuilder AppendLine(this StringBuilder builder, string Format, object arg0) => builder.AppendFormat(Format, arg0);
+
+    [StringFormatMethod("Format")]
+    public static StringBuilder AppendLine(this StringBuilder builder, string Format, object arg0, object arg1) => builder.AppendFormat(Format, arg0, arg1);
+
+    [StringFormatMethod("Format")]
+    public static StringBuilder AppendLine(this StringBuilder builder, string Format, object arg0, object arg1, object arg2) => builder.AppendFormat(Format, arg0, arg1, arg2);
+
+    [StringFormatMethod("Format")]
+    public static StringBuilder AppendLine(this StringBuilder builder, string Format, params object[] args) => builder.AppendFormat(Format, args);
+
     public static StringBuilder LN(this StringBuilder builder) => builder.AppendLine();
     public static StringBuilder LN(this StringBuilder builder, string str) => builder.AppendLine(str);
+    [StringFormatMethod("Format")]
+    public static StringBuilder LN(this StringBuilder builder, string Format, object arg0) => builder.Append(Format, arg0).LN();
+    [StringFormatMethod("Format")]
+    public static StringBuilder LN(this StringBuilder builder, string Format, object arg0, object arg1) => builder.Append(Format, arg0, arg1).LN();
+    [StringFormatMethod("Format")]
+    public static StringBuilder LN(this StringBuilder builder, string Format, object arg0, object arg1, object arg2) => builder.Append(Format, arg0, arg1, arg2).LN();
+    [StringFormatMethod("Format")]
+    public static StringBuilder LN(this StringBuilder builder, string Format, params object[] args) => builder.Append(Format, args).LN();
 
     public static StringBuilder Ident(this StringBuilder builder, int Level = 1, string Ident = "    ")
     {

@@ -65,7 +65,7 @@ public class NotifyPropertyGenerator : IIncrementalGenerator
 
             var source = new StringBuilder("// Auto-generated code at ")
                .AppendLine(DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss.fff"))
-               .AppendLine("#nullable disable")
+               .Nullable()
                .Namespace(class_namespace)
                .AppendLine();
 
