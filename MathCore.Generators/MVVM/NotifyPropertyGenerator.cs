@@ -53,7 +53,8 @@ public class NotifyPropertyGenerator : IIncrementalGenerator
                    .GetMembers()
                    .OfType<IFieldSymbol>()
                    .Any(
-                        static field => !field.IsReadOnly && !field.IsStatic
+                        static field => !field.IsReadOnly 
+                            && !field.IsStatic
                             && field.GetAttributeLike("NotifyProperty") is { } attribute
                             && attribute.NamedArgument("INotifyPropertyChangesImplementation", true)))
             {

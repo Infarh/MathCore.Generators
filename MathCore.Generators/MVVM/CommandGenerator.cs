@@ -57,7 +57,7 @@ public class CommandGenerator : IIncrementalGenerator
             if (access_modifiers is { Length: > 0 })
                 source.Append(access_modifiers).Append(' ');
             source.Append("partial class {0}", class_name).LN();
-            source.Append("{").LN();
+            source.Append('{').LN();
 
             var is_first = true;
             foreach (var execute_method in class_symbol.EnumCommandsMethods())
@@ -172,13 +172,13 @@ public class CommandGenerator : IIncrementalGenerator
         on_executed.ToDisplayString() is "System.Action<object>" or "System.Action<object?>";
 
     private static bool IsTwoParameterWithOptionalCtor(IMethodSymbol Ctor) =>
-        Ctor.Parameters is [ { } on_executed, { } can_execute]
+        Ctor.Parameters is [{ } on_executed, { } can_execute]
         && on_executed.ToDisplayString() is "System.Action<object>" or "System.Action<object?>"
         && can_execute.ToDisplayString().TrimEnd('?') is "System.Func<object, bool>" or "System.Func<object?, bool>"
         && can_execute.IsOptional;
 
     private static bool IsTwoParametersCtor(IMethodSymbol Ctor) =>
-        Ctor.Parameters is [ { } on_executed, { } can_execute]
+        Ctor.Parameters is [{ } on_executed, { } can_execute]
         && on_executed.ToDisplayString() is "System.Action<object>" or "System.Action<object?>"
         && can_execute.ToDisplayString().TrimEnd('?') is "System.Func<object, bool>" or "System.Func<object?, bool>";
 
@@ -186,15 +186,15 @@ public class CommandGenerator : IIncrementalGenerator
     {
         var result = MethodName;
 
-        if (result is [ 'O', 'n', .. { Length: > 0 } value, 'E', 'x', 'e', 'c', 'u', 't', 'e', 'd'])
-            result = value;
+        //if (result is ['O', 'n', .. { Length: > 0 } value, 'E', 'x', 'e', 'c', 'u', 't', 'e', 'd'])
+        //    result = value;
 
         if (result is ['O', 'n', .. { Length: > 0 } tail])
             result = tail;
 
         if (result is [.. { Length: > 0 } head, 'E', 'x', 'e', 'c', 'u', 't', 'e', 'd'])
             result = head;
-        
+
         //if (result.Length > 2 && result.StartsWith("On"))
         //    result = result[2..];
 

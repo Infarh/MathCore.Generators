@@ -7,7 +7,7 @@ internal static class SymbolEx
         if (symbol?.GetAttributes() is not { IsDefaultOrEmpty: false } attributes) return null;
 
         foreach (var attribute in attributes)
-            if (attribute is { AttributeClass.Name: var name } && name == AttributeName)
+            if (attribute is { AttributeClass.Name: { } name } && name == AttributeName)
                 return attribute;
 
         return null;
@@ -18,7 +18,7 @@ internal static class SymbolEx
         if (symbol?.GetAttributes() is not { IsDefaultOrEmpty: false } attributes) return null;
 
         foreach (var attribute in attributes)
-            if (attribute is { AttributeClass.Name: var name } && name.Contains(AttributeName))
+            if (attribute is { AttributeClass.Name: { } name } && name.Contains(AttributeName))
                 return attribute;
 
         return null;
@@ -29,7 +29,7 @@ internal static class SymbolEx
         if (symbol?.GetAttributes() is not { IsDefaultOrEmpty: false } attributes) return false;
 
         foreach (var attribute in attributes)
-            if (attribute is { AttributeClass.Name: var name } && name.Contains(AttributeName))
+            if (attribute is { AttributeClass.Name: { } name } && name.Contains(AttributeName))
                 return true;
 
         return false;

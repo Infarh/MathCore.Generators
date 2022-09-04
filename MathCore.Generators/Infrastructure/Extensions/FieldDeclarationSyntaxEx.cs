@@ -10,9 +10,9 @@ internal static class FieldDeclarationSyntaxEx
 
     public static bool IsNotifyPropertyField(this FieldDeclarationSyntax field) => field.ContainsAttributeText("NotifyProperty");
 
-    public static bool IsStatic(this FieldDeclarationSyntax field) => field.Modifiers.Any(static m => m.ValueText == "static");
+    public static bool IsStatic(this FieldDeclarationSyntax field) => field.Modifiers.Any(static m => m.ValueText is "static");
 
-    public static bool IsReadonly(this FieldDeclarationSyntax field) => field.Modifiers.Any(static m => m.ValueText == "readonly");
+    public static bool IsReadonly(this FieldDeclarationSyntax field) => field.Modifiers.Any(static m => m.ValueText is "readonly");
 }
 
 internal static class MethodDeclarationSyntaxEx
@@ -23,5 +23,5 @@ internal static class MethodDeclarationSyntaxEx
 
     public static bool IsCommandHandlerMethod(this MethodDeclarationSyntax method) => method.ContainsAttributeText("Command");
 
-    public static bool IsStatic(this MethodDeclarationSyntax method) => method.Modifiers.Any(static m => m.ValueText == "static");
+    public static bool IsStatic(this MethodDeclarationSyntax method) => method.Modifiers.Any(static m => m.ValueText is "static");
 }
