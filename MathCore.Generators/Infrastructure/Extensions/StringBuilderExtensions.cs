@@ -1,4 +1,5 @@
 ﻿using System.Text;
+
 using Microsoft.CodeAnalysis.Text;
 
 namespace MathCore.Generators.Infrastructure.Extensions;
@@ -24,7 +25,12 @@ public static class StringBuilderExtensions
        .Append(Namespace)
        .AppendLine(";");
 
-    public static StringBuilder Nullable(this StringBuilder builder, bool Enable = true) => builder.AppendLine(Enable ? "#nullable enable" : "#nullable disable");
+    public static StringBuilder Nullable(this StringBuilder builder, bool Enable = true)
+    {
+        if (builder is not [.., '\n'])
+            builder.LN();
+        return builder.AppendLine(Enable ? "#nullable enable" : "#nullable disable");
+    }
 
     public static StringWriter CreateWriter(this StringBuilder builder) => new(builder);
 
@@ -54,7 +60,7 @@ public static class StringBuilderExtensions
         }
     }
 
-    public static RegionBuilder Region(this StringBuilder builder, string RegionName, int Ident = 1, bool FreeLineOffset = true) => 
+    public static RegionBuilder Region(this StringBuilder builder, string RegionName, int Ident = 1, bool FreeLineOffset = true) =>
         new(builder, RegionName, Ident, FreeLineOffset);
 
     public static StringBuilder AddProperty(this StringBuilder source, string Type, string FieldName, string PropertyName) => source
@@ -65,11 +71,11 @@ public static class StringBuilderExtensions
         .Append("    }").LN();
 
     public static StringBuilder AddNotifyProperty(
-        this StringBuilder source, 
-        string Type, 
-        string FieldName, 
-        string PropertyName, 
-        bool GenerateEvent = false, 
+        this StringBuilder source,
+        string Type,
+        string FieldName,
+        string PropertyName,
+        bool GenerateEvent = false,
         string? Comment = null)
     {
         if (Comment is { Length: > 0 })

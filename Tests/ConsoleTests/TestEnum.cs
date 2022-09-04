@@ -23,3 +23,11 @@ public enum TestEnum
     [Description("V4321")]
     Value4,
 }
+
+internal static class TestEnumTest
+{
+    public static void Test(TestEnum e)
+    {
+        //TestEnumExtensions
+    }
+}
