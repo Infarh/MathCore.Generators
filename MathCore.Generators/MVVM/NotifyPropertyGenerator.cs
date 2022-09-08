@@ -17,9 +17,7 @@ public class NotifyPropertyGenerator : IIncrementalGenerator
     {
         var classes = context.SyntaxProvider
            .CreateSyntaxProvider(
-                static (node, _) => node is ClassSyntax { Members: var members } @class
-                    && @class.IsPartial()
-                    && !@class.IsStatic()
+                static (node, _) => node is ClassSyntax { Members: var members }
                     && members.OfType<FieldSyntax>().Any(static field => !field.IsStatic() && !field.IsReadonly() && field.IsNotifyPropertyField()),
                 static (context, _) => context.Node as ClassSyntax)
            .Where(static s => s is not null)
@@ -35,8 +33,35 @@ public class NotifyPropertyGenerator : IIncrementalGenerator
         if (Classes.IsDefaultOrEmpty)
             return;
 
-        foreach (var class_syntax in Classes) 
+        foreach (var class_syntax in Classes)
         {
+            if (!class_syntax.IsPartial())
+            {
+                var class_location = class_syntax.GetLocation();
+                var keyword_location = class_syntax.Keyword.GetLocation();
+                var error_location = Location.Create(class_syntax.SyntaxTree, TextSpan.FromBounds(class_location.SourceSpan.Start, keyword_location.SourceSpan.End));
+                Context.Error(
+                    "MVVMINPCErr001",
+                    "Ошибка генерации свойства",
+                    "MVVM.INPC",
+                    "Класс должен быть partial",
+                    error_location);
+
+                continue;
+            }
+
+            if (class_syntax.IsStatic())
+            {
+                var error_location = class_syntax.Modifiers.First(m => m.ValueText == "static").GetLocation();
+                Context.Error(
+                    "MVVMINPCErr002",
+                    "Ошибка генерации свойства",
+                    "MVVM.INPC",
+                    "Класс не должен быть статическим",
+                    error_location);
+                continue;
+            }
+
             var model = Compilation.GetSemanticModel(class_syntax.SyntaxTree);
 
             if (model.GetDeclaredSymbol(class_syntax) is not { IsStatic: false } class_symbol)
@@ -53,7 +78,7 @@ public class NotifyPropertyGenerator : IIncrementalGenerator
                    .GetMembers()
                    .OfType<IFieldSymbol>()
                    .Any(
-                        static field => !field.IsReadOnly 
+                        static field => !field.IsReadOnly
                             && !field.IsStatic
                             && field.GetAttributeLike("NotifyProperty") is { } attribute
                             && attribute.NamedArgument("INotifyPropertyChangesImplementation", true)))

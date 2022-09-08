@@ -64,13 +64,13 @@ internal class CSVColumnAttribute : System.Attribute
 
         if (!Class.IsPartial())
         {
-            Context.Warning("GenCSVWarn001", "CSV", "CSV", "Класс должен иметь модификатор partial");
+            Context.Error("GenCSVErr001", "CSV", "CSV", "Класс должен иметь модификатор partial");
             return;
         }
 
         if (Class.IsStatic())
         {
-            Context.Warning("GenCSVWarn002", "CSV", "CSV", "Класс не должен иметь модификатор static");
+            Context.Error("GenCSVErr002", "CSV", "CSV", "Класс не должен быть статическим");
             return;
         }
 

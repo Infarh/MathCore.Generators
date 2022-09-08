@@ -3,12 +3,12 @@ using MathCore.Generated.MVVM;
 
 namespace ConsoleTests;
 
-public partial class ConsoleViewModel
+public class ConsoleViewModel
 {
     [NotifyProperty]
     private string? _Title;
 
-    //[Command(CanExecuteMethodName = nameof(CanTestCommandExecute))]
+    [Command(CanExecuteMethodName = nameof(CanTestCommandExecute))]
     private void OnTestCommandExecuted(object p) { }
 
     private bool CanTestCommandExecute(object? p) => p is not null;

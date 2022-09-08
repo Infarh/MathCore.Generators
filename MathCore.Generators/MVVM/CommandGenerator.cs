@@ -5,6 +5,7 @@ using System.Text;
 using System.Windows.Input;
 
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Text;
 
 namespace MathCore.Generators.MVVM;
 
@@ -14,9 +15,7 @@ public class CommandGenerator : IIncrementalGenerator
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
         var classes = context.SyntaxProvider.CreateSyntaxProvider(
-                static (node, _) => node is ClassSyntax { Members: var members } @class
-                    && @class.IsPartial()
-                    && !@class.IsStatic()
+                static (node, _) => node is ClassSyntax { Members: var members }
                     && members.OfType<MethodSyntax>().Any(static method => !method.IsStatic() && method.IsCommandHandlerMethod()),
                 static (context, _) => context.Node as ClassSyntax)
            .Where(static c => c is not null);
@@ -33,9 +32,46 @@ public class CommandGenerator : IIncrementalGenerator
         if (Classes.IsDefaultOrEmpty)
             return;
 
-
         foreach (var class_syntax in Classes)
         {
+            if (class_syntax.IsStatic())
+            {
+                var class_location   = class_syntax.GetLocation();
+                var keyword_location = class_syntax.Keyword.GetLocation();
+                var error_location = Location.Create(
+                    class_syntax.SyntaxTree,
+                    TextSpan.FromBounds(
+                        class_location.SourceSpan.Start,
+                        keyword_location.SourceSpan.End));
+
+                Context.Error(
+                    "MVVMCMDErr005",
+                    "Ошибка генерации команды",
+                    "MVVM.CMD",
+                    "Класс не должен быть статическим",
+                    error_location);
+                continue;
+            }
+
+            if (!class_syntax.IsPartial())
+            {
+                var class_location   = class_syntax.GetLocation();
+                var keyword_location = class_syntax.Keyword.GetLocation();
+                var error_location = Location.Create(
+                    class_syntax.SyntaxTree,
+                    TextSpan.FromBounds(
+                        class_location.SourceSpan.Start,
+                        keyword_location.SourceSpan.End));
+
+                Context.Error(
+                    "MVVMCMDErr006",
+                    "Ошибка генерации команды",
+                    "MVVM.CMD",
+                    "Класс должен быть частичным",
+                    error_location);
+                continue;
+            }
+
             var model = Compilation.GetSemanticModel(class_syntax.SyntaxTree);
 
             if (model.GetDeclaredSymbol(class_syntax) is not INamedTypeSymbol { IsStatic: false } class_symbol)
