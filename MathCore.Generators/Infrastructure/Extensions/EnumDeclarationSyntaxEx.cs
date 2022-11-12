@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
+﻿using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace MathCore.Generators.Infrastructure.Extensions;
 
@@ -16,6 +17,6 @@ internal static class EnumDeclarationSyntaxEx
     }
 
     public static IEnumerable<string> EnumAccessModifiers(this EnumDeclarationSyntax Class) => Class.Modifiers
-       .Select(m => m.ValueText)
-       .Where(m => m is "public" or "private" or "internal" or "protected");
+       .Where(m => m.IsKind(SyntaxKind.PublicKeyword, SyntaxKind.InternalKeyword, SyntaxKind.ProtectedKeyword))
+       .Select(m => m.ValueText);
 }

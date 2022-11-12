@@ -1,7 +1,18 @@
-﻿namespace MathCore.Generators.Infrastructure.Extensions;
+﻿using Microsoft.CodeAnalysis.CSharp;
+
+namespace MathCore.Generators.Infrastructure.Extensions;
 
 internal static class SourceProductionContextEx
 {
+    public static void Report(this SourceProductionContext context, DiagnosticDescriptor Descriptor, SyntaxToken Token) =>
+        context.Report(Descriptor, Token.GetLocation());
+
+    public static void Report(this SourceProductionContext context, DiagnosticDescriptor Descriptor, CSharpSyntaxNode Node, SyntaxToken Token) => 
+        context.Report(Descriptor, Node.GetLocation().Union(Token.GetLocation()));
+
+    public static void Report(this SourceProductionContext context, DiagnosticDescriptor Descriptor, Location Location) =>
+        context.ReportDiagnostic(Diagnostic.Create(Descriptor, Location));
+
     public static void Warning(
         this SourceProductionContext context,
            string Id,
